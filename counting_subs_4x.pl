@@ -106,7 +106,7 @@ $totallength = $count_sub + $count_same;
 
 print "The number of subs is $count_sub. The number of matches is $count_same.\n\n";
 
-print "To check yo'self, $totallength should equal the length of the alignment.\n\n";
+print "$totallength should equal the length of the alignment.\n\n";
 
 exit;
 

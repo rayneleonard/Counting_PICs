@@ -103,15 +103,10 @@ while ($counter <= $lengtharray)
 $indels = $count_up_insertion + $count_up_deletion;
 $snp = $count_up_snp - 1;
 
-print "number of indels for $refseq_name is $indels and number of SNPs is $snp\n\n";
-print "length of array is $lengtharray\n";
+print "Total number of indels for $refseq_name is $indels and total number of SNPs is $snp\n\n";
+print "Total length of array is $lengtharray\n";
 
 
-# print OUTPUT "this is awesomesauce.\n";
-#  print OUTPUT "this accurately counts SNPs and number of indels as I want them coded.
-#  Still doesn't give length of indels, but for now, this is great.\n";
-#  print OUTPUT "note that the last character (106) is coded as SNP, though that is really the
-#  end of the seq. not a big deal.\n";
-#  
+
  
  
