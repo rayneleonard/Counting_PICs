@@ -1,0 +1,6 @@
+Type		bp		position
+SNP			C	G	0
+SNP			T	A	10
+Deletion			18
+SNP			T	G	39
+SNP			G	A	62

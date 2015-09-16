@@ -1,33 +1,34 @@
 #!/usr/bin/perl 
+#using perl version 5.18.2
+
 
 #writing a program that will count subs in a fasta or txt alignment file
-#input: program_practice.fasta
 
 #in this program, I will treat each input[1], input[3], and so on 
 #and put them into an array together to be parsed. 
 
-#that would mean I need a different program for 4x and 9x alignments. 
+#this program will use a multiple alignment with 10 sequences aligned in fasta format
+#the first sequence is used as the reference
 
+#note that this only counts SNPs, not insertions/deletions. 
 
 #open gene input file; needs to be in FASTA format
+#pull in from command line
 open(INPUT, "$ARGV[0]") || die "Can't find input file, try again; $!n";
-#can make this go through all files in a directory 
-open (OUTPUT, '>output_subs_9.txt') || die "can't open output;$!n";
-
+#open output file
+open (OUTPUT, '>output_10x.txt') || die "can't open output;$!n";
+#label output file
+print OUTPUT "\t\t\tbp\t\tposition\n";
 
 #put into array;
 @input = <INPUT>;
 
-#length of array
-# $lengtharray = scalar @input; 
-# $counter = 0;
-
 #assigning vars
-# $ref = 0;
+
 $counter = 0;
-# $queryseqnt = 0;
+
 $count_sub = 0;
-# $delete_length = 0;
+
 
 
 $query1_name = $input[0];
@@ -48,6 +49,8 @@ $query8_name = $input[14];
 $query8= $input[15];
 $query9_name = $input[16];
 $query9 = $input[17];
+$query10_name = $input[18];
+$query10 = $input[19];
 
 #chomp and clear out invisible characters here 
 chomp $query1;
@@ -59,6 +62,7 @@ chomp $query6;
 chomp $query7;
 chomp $query8;
 chomp $query9;
+chomp $query10;
 
 $query1 =~ s/[^\w-]//g;
 $query2 =~ s/[^\w-]//g;
@@ -69,6 +73,7 @@ $query6 =~ s/[^\w-]//g;
 $query7 =~ s/[^\w-]//g;
 $query8 =~ s/[^\w-]//g;
 $query9 =~ s/[^\w-]//g;
+$query10 =~ s/[^\w-]//g;
 
 #print "$refseq_name \n $query_name \n"; success. 
 
@@ -84,17 +89,14 @@ $query9 =~ s/[^\w-]//g;
 @query7 = split ('', $query7);
 @query8 = split ('', $query8);
 @query9 = split ('', $query9);
-
+@query10 = split ('', $query10);
 # 
 # print "@refseq\n\n\n@queryseq"; 
 $length1 = scalar @query1;
-# $length2 = scalar @query2;
-# $length3 = scalar @query3;
-# $length4 = scalar @query4;
+
 
 #print "$query1\n$query2\n"; that printed as it should have
 
-#going to stick to pairwise comparisons. q 
 
 while ($counter <= $length1)
 {
@@ -105,13 +107,12 @@ while ($counter <= $length1)
 
 	$query4nt = $query4[$counter];
 	$query5nt = $query5[$counter];
-	#counter is how many things in arrays
 	$query6nt = $query6[$counter];
 	$query7nt = $query7[$counter];
 
 	$query8nt = $query8[$counter];
 	$query9nt = $query9[$counter];
-
+	$query10nt = $query10[$counter];
 
 
 	
@@ -141,7 +142,7 @@ while ($counter <= $length1)
 	elsif ($query1nt ne $query6nt && $query1nt ne "-" && $query6nt ne "-")
 	{
 		++$count_sub;
-				print OUTPUT "SNPm 1,6 \t$query1nt\t$query6nt\t$counter\n";
+				print OUTPUT "SNP 1,6 \t$query1nt\t$query6nt\t$counter\n";
 
 	}
 	elsif ($query1nt ne $query7nt && $query1nt ne "-" && $query7nt ne "-")
@@ -162,6 +163,12 @@ while ($counter <= $length1)
 				print OUTPUT "SNP 1,9 \t$query1nt\t$query9nt\t$counter\n";
 
 	}
+	elsif ($query1nt ne $query10nt && $query1nt ne "-" && $query10nt ne "-")
+	{
+		++$count_sub;
+				print OUTPUT "SNP 1,10 \t$query1nt\t$query10nt\t$counter\n";
+
+	}
 	else
 	{
 		++$count_same;
@@ -170,11 +177,13 @@ while ($counter <= $length1)
 ++$counter;
 		
 }
-$totallength = $count_sub + $count_same;
+$totallength = $count_sub + $count_same - 1;
 
-print "The number of subs is $count_sub.\n\n";
+print "The number of SNPs in alignment is $count_sub.\n\n";
 
-print "$totallength, the number of subs plus the number of matches,\n should equal the length of the alignment, $length1.\n\n";
+print "The alignment length is $length1 base pairs.\n\n";
 
 exit;
 
+#test file 10x_example.fasta length: 63bp
+#test file SNPs: 6

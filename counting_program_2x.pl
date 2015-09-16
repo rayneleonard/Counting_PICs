@@ -1,20 +1,22 @@
 #!/usr/bin/perl 
+#perl version 5.18.2
+
 
 #writing a program that will count subs and indels in a fasta or txt alignment file
-#input: program_practice.fasta
+#utilizes pairwise alignment
+
+#printing length of indel to output file will be included in an update
 
 #open gene input file
 open(INPUT, "$ARGV[0]") || die "Can't find fasta file, try again; $!n";
 #can make this go through all files in a directory 
-#open (OUTPUT, '>output.txt') || die "can't open output;$!n";
+open (OUTPUT, '>output_2x.txt') || die "can't open output;$!n";
 
+print OUTPUT "Type\t\tbp\t\tposition\n";
 
 #put into array;
 @input = <INPUT>;
 
-#length of array
-# $lengtharray = scalar @input; 
-# $counter = 0;
 
 #assigning vars
 $refseqnt = 0;
@@ -29,7 +31,12 @@ $refseq = $input[1];
 $query_name = $input[2];
 $queryseq = $input[3];
 
-#print "$refseq_name \n $query_name \n"; success. 
+#chomp and clear out invisible characters here 
+chomp $refseq_name;
+chomp $refseq;
+chomp $query_name;
+chomp $queryseq;
+
 
 #1 and 3 need to be vars to start with then split on '', not in loop. 
 #this explodes the strings. Already single strings. 
@@ -40,7 +47,6 @@ $queryseq = $input[3];
 # print "@refseq\n\n\n@queryseq"; 
 $lengtharray = scalar @refseq;
 
-#going to stick to pairwise comparisons. q 
 
 while ($counter <= $lengtharray)
 {
@@ -48,10 +54,7 @@ while ($counter <= $lengtharray)
 	#counter is how many things in arrays
 	$queryseqnt = $queryseq[$counter];
 	
-	#if ($refseqnt eq $queryseqnt)
-	#{
-	#	++$count_up_same;
-	#}
+	
 	if ($refseqnt ne $queryseqnt)
 	{
 		if ($refseqnt eq "-") 
@@ -67,7 +70,7 @@ while ($counter <= $lengtharray)
 			else #prior_insert !eq -
 			{
 			$insert_location= $counter - $insert_length;
-			print OUTPUT "Insertion\t$insert_location\t$insert_length\n";
+			print OUTPUT "Insertion\t\t\t$insert_location\n";
 			$insert_length = 0;
 			++$count_up_insertion;
 			
@@ -84,7 +87,7 @@ while ($counter <= $lengtharray)
 			else
 			{
 			$delete_location = $counter - $delete_length;
-			print OUTPUT "Deletion\t$delete_location\t$delete_length\n";
+			print OUTPUT "Deletion\t\t\t$delete_location\n";
 			$delete_length = 0;
 			++$count_up_deletion;
 			} 
@@ -93,7 +96,7 @@ while ($counter <= $lengtharray)
 		if ($refseqnt ne "-" && $queryseqnt ne "-") 
 		{
 		++$count_up_snp;
-		print OUTPUT "SNP\t\t\t$counter\t$refseqnt\t$queryseqnt\n";
+		print OUTPUT "SNP\t\t\t$refseqnt\t$queryseqnt\t$counter\n";
 		}
 	}
 	$prior_insert = $refseqnt;
@@ -101,11 +104,14 @@ while ($counter <= $lengtharray)
 	++$counter;
 }
 $indels = $count_up_insertion + $count_up_deletion;
-$snp = $count_up_snp - 1;
+$snp = $count_up_snp;
 
 print "Total number of indels for $refseq_name is $indels and total number of SNPs is $snp\n\n";
 print "Total length of array is $lengtharray\n";
 
+#example file 2x_example.fasta length 63 bp
+#indels 1
+#SNPs 3
 
 
  
