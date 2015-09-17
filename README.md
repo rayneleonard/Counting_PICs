@@ -2,7 +2,7 @@
 
 parsing DNA alignments for PICs
 
-PICs: potentially informative characters
+PICs: potentially informative characters,
   includes indels and SNPs
 
 Useful for screening genetic data for potentially phylogenetically informative markers
