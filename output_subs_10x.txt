@@ -1,0 +1,7 @@
+			bp		position
+SNP 1,2 	C	G	0
+SNP 1,2 	T	A	10
+SNP 1,3 	T	G	24
+SNP 1,5 	C	A	33
+SNP 1,9 	G	T	44
+SNP 1,10 	G	C	62
